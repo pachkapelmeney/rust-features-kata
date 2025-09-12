@@ -4,6 +4,22 @@ fn bigger(a: i32, b: i32) -> i32 {
     // Do not use:
     // - another function call
     // - additional variables
+    // if a > b
+    //     {a}
+    // else if b > a
+    //     {b}
+    // else
+    //     {return a;}
+
+    //еще корогче
+    if a > b { a } else { b }
+
+    // match a {
+    //     a if a > b => {a}
+    //     b if b > a => {b}  // b - здесь это новая переменная, сопостовлаяемого выражания ( тоесть а). -> поэтому эквивалентоно ( a > a)
+    //     any if a == b => {any} //
+    //     i32::MIN..=i32::MAX => todo!()
+    // }
 }
 
 fn main() {

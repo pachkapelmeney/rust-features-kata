@@ -27,10 +27,22 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         let team_1_score: u8 = split_iterator.next().unwrap().parse().unwrap();
         let team_2_score: u8 = split_iterator.next().unwrap().parse().unwrap();
 
+        let entry1 = format!("{},{}", team_1_name, team_2_name); //-> &str чтобы вернуло
+        let entry2 = format!("{},{}", team_2_name, team_1_name);
+
+        // let team_1_score = formatGH!("{},{}", team_1_score, team_1_score);
+        let score_1 = TeamScores { goals_scored: team_1_score, goals_conceded: team_2_score };
+        let score_2 = TeamScores { goals_scored: team_2_score, goals_conceded: team_1_score };
+        // let team_2_score = format!("{},{}", team_2_score, team_1_score);
+
+        // scores.ins //entry(entry1).insert_entry(score_1);->   убирая & ключи будут не заимствованные, а владеющие
+        // scores.entry(entry2).insert_entry(score_2);
         // TODO: Populate the scores table with the extracted details.
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
+
+        //entry1, entry2 - уничтожатся в конце скоупа, поэтому нельзя просто оставлять &
     }
 
     scores

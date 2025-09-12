@@ -1,4 +1,4 @@
-struct Point {
+ struct Point {
     x: u64,
     y: u64,
 }
@@ -44,6 +44,15 @@ impl State {
     }
 
     fn process(&mut self, message: Message) {
+        match message {
+            Message::Resize { width, height } => {self.width = width; self.height = height},
+            Message::Move(point) => self.position = point,
+            Message::Echo(_) => self.message = String::from("Hello world!"),
+            Message::ChangeColor(a, b, c) => self.color = (255, 0, 255),
+            Message::Quit => 
+                self.quit = true
+            ,
+        }
         // TODO: Create a match expression to process the different message
         // variants using the methods defined above.
     }

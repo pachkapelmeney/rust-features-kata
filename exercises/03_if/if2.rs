@@ -1,9 +1,12 @@
 // TODO: Fix the compiler error on this function.
 fn picky_eater(food: &str) -> &str {
-    if food == "strawberry" {
-        "Yummy!"
+    if food == "strawberry" { // это меж цикл, нужен  return
+        return "Yummy!"
+    }
+    if food == "potato" {    //так происходит потому что это последний иф цикл в этом скоупе
+        "I guess I can eat that."
     } else {
-        1
+        "No thanks!"
     }
 }
 
