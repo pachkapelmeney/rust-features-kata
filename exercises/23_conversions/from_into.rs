@@ -38,8 +38,8 @@ impl Default for Person {
 impl From<&str> for Person {
     fn from(s: &str) -> Self {
         let person: Vec<&str> = s.split(',').collect();
-        if person.len() < 2
-            { return Person::default() }
+        if person.len() < 2 || person.len() > 2
+            { Person::default() }
         else {
 
             // let t2 = person.into_iter().map(|x| x);
@@ -50,8 +50,10 @@ impl From<&str> for Person {
             // }
             let name = person[0]; // or empty 
             let age = person[1].parse::<u8>().unwrap_or(0); //after [1] should be a check
-            if name.is_empty() 
+            if name.is_empty() || age == 0
                 {return Person::default()}
+            if age == 0
+                {return Person::default()} // как обединить?
 
             // match name.is_empty() | age == 0{
             //     true => Person::default(),

@@ -6,7 +6,7 @@
 // number of goals the team scored, and the total number of goals the team
 // conceded.
 
-use std::collections::HashMap;
+use std::{collections::HashMap, ptr::hash};
 
 // A structure to store the goal details of a team.
 #[derive(Default)]
@@ -15,24 +15,38 @@ struct TeamScores {
     goals_conceded: u8,
 }
 
-fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
+fn build_scores_table(results: &str) -> HashMap<String, TeamScores> {
     // The name of the team is the key and its associated struct is the value.
-    let mut scores = HashMap::<&str, TeamScores>::new();
-
+    // let mut scores = HashMap::<&str, TeamScores>::new();
+    let mut hashmap = HashMap::<String, TeamScores>::new(); // как тут поставить lifetime, чтобы entry жило как и эта запись?
+    // но она же не &referencem чтоы ставить lifetime
     for line in results.lines() {
+        // let mut split_iterator = line.split(',').collect::<std::vec::Vec<&str>>();
         let mut split_iterator = line.split(',');
+
         // NOTE: We use `unwrap` because we didn't deal with error handling yet.
         let team_1_name = split_iterator.next().unwrap();
         let team_2_name = split_iterator.next().unwrap();
         let team_1_score: u8 = split_iterator.next().unwrap().parse().unwrap();
-        let team_2_score: u8 = split_iterator.next().unwrap().parse().unwrap();
+        let team_2_score: u8  = split_iterator.next().unwrap().parse().unwrap();
 
-        let entry1 = format!("{},{}", team_1_name, team_2_name); //-> &str чтобы вернуло
-        let entry2 = format!("{},{}", team_2_name, team_1_name);
+        hashmap.entry(team_1_name.to_string())
+            .and_modify(|ts| { 
+                ts.goals_scored = ts.goals_scored.saturating_add(team_1_score);
+            ts.goals_conceded = ts.goals_conceded.saturating_add(team_2_score); })
+            .or_insert(TeamScores { goals_scored: team_1_score, goals_conceded: team_2_score });
 
+        hashmap.entry(team_2_name.to_string())
+            .and_modify(|ts| { ts.goals_scored = ts.goals_scored.saturating_add(team_2_score);
+                               ts.goals_conceded = ts.goals_conceded.saturating_add(team_1_score); })
+            .or_insert(TeamScores { goals_scored: team_2_score, goals_conceded: team_1_score });
+
+        // let entry1 = format!("{},{}", team_1_name, team_2_name); //-> &str чтобы вернуло
+        // let entry2 = format!("{},{}", team_2_name, team_1_name);
+        
         // let team_1_score = formatGH!("{},{}", team_1_score, team_1_score);
-        let score_1 = TeamScores { goals_scored: team_1_score, goals_conceded: team_2_score };
-        let score_2 = TeamScores { goals_scored: team_2_score, goals_conceded: team_1_score };
+        // hashmap.insert((team_1_name, team_2_name), TeamScores { goals_scored: team_1_score, goals_conceded: team_2_score });
+        // hashmap.insert(entry2, TeamScores { goals_scored: team_2_score, goals_conceded: team_1_score });
         // let team_2_score = format!("{},{}", team_2_score, team_1_score);
 
         // scores.ins //entry(entry1).insert_entry(score_1);->   убирая & ключи будут не заимствованные, а владеющие
@@ -42,10 +56,14 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
 
+
+        // "England,France,4,2"
+        // hashmap.insert(entry1 ,score_1);
+        // hashmap.insert(entry2, score_2);
         //entry1, entry2 - уничтожатся в конце скоупа, поэтому нельзя просто оставлять &
     }
 
-    scores
+    hashmap
 }
 
 fn main() {
