@@ -19,7 +19,7 @@ enum Fruit {
     Pineapple,
 }
 
-fn fruit_basket(basket: &mut HashMap<Fruit, u32>) {
+fn fruit_basket(basket: &mut HashMap<Fruit, u32>) { 
     let fruit_kinds = [
         Fruit::Apple,
         Fruit::Banana,
