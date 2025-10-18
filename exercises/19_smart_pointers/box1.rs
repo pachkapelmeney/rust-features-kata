@@ -9,21 +9,34 @@
 // item in a cons list contains two elements: The value of the current item and
 // the next item. The last item is a value called `Nil`.
 
+use std::ops::Deref;
+
 // TODO: Use a `Box` in the enum definition to make the code compile.
 #[derive(PartialEq, Debug)]
 enum List {
-    Cons(i32, List),
+    Cons(i32, Box<List>), //Box<List> - means the tail of the list is ALWAYS (even it's empty Nil) will be the box
     Nil,
 }
+// impl PartialEq for List {
+//     fn eq(&self, other: &Self) -> bool {
+//         match (self, other) {
+//             (Self::Cons(l0, l1), 
+//              Self::Cons(r0, r1))  // может ут ткак-то указать что можно сравнивать Box<List> с List ?
+//                 => l0 == r0 && l1 == r1,
+//             _ => false,
+//         }
+//     }
+// }
 
 // TODO: Create an empty cons list.
 fn create_empty_list() -> List {
-    todo!()
+    List::Nil
 }
 
 // TODO: Create a non-empty cons list.
 fn create_non_empty_list() -> List {
-    todo!()
+    // List::Cons(3, List::Nil)
+    List::Cons(3, Box::new(List::Nil))
 }
 
 fn main() {
