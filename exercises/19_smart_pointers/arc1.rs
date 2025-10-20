@@ -26,13 +26,14 @@ fn main() {
     // let shared_numbers = ???;
 
     let mut join_handles = Vec::new();
+    let shared_numbers = Arc::new(numbers);
 
     for offset in 0..8 {
         // TODO: Define `child_numbers` using `shared_numbers`.
         // let child_numbers = ???;
-
+        let child_numbers = Arc::clone(&shared_numbers);
         let handle = thread::spawn(move || {
-            let sum: u32 = child_numbers.iter().filter(|&&n| n % 8 == offset).sum();
+            let sum: u32 = child_numbers.clone().iter().filter(|&&n| n % 8 == offset).sum();
             println!("Sum of offset {offset} is {sum}");
         });
 
