@@ -11,15 +11,26 @@
 // Make the necessary code changes in the struct `ReportCard` and the impl
 // block to support alphabetical report cards in addition to numerical ones.
 
+use std::{f32, fmt::{Display, Error}, num::ParseIntError, string::ParseError};
+
 // TODO: Adjust the struct as described above.
-struct ReportCard {
-    grade: f32,
+struct ReportCard<T> 
+    where T: Display {
+    grade: T,
     student_name: String,
     student_age: u8,
 }
 
+// impl<T> Grade<T> for ReportCard<T> {
+    
+// }
+
+// trait Grade<T> {
+
+// }
+
 // TODO: Adjust the impl block as described above.
-impl ReportCard {
+impl<T> ReportCard<T> where T: Display{
     fn print(&self) -> String {
         format!(
             "{} ({}) - achieved a grade of {}",
@@ -28,11 +39,28 @@ impl ReportCard {
     }
 }
 
+// impl ReportCard {
+//     fn print(&self) -> String {
+//         format!(
+//             "{} ({}) - achieved a grade of {:?}",
+//             &self.student_name, &self.student_age, Self::match_grade(&self.grade),
+//         )
+//     }
+
+//     fn match_grade(grade: &f32) -> Result<String, Error> {
+//         match grade {
+//             5.0 => Ok("A+".to_string()),
+//             4.5=> Ok("A".to_string()),
+//             _ => Err(Error)
+//         }
+//     }
+// }
+
 fn main() {
     // You can optionally experiment here.
 }
 
-#[cfg(test)]
+#[cfg(test)]    
 mod tests {
     use super::*;
 

@@ -25,38 +25,12 @@ fn char_counter<T: AsRef<str>>(arg: T) -> usize
 fn num_sq<T: AsMut<u32>>(arg: &mut T)
 // where T: Mul<Output = T> + Clone + Copy 
 {
-    let mut value = arg.as_mut();
-    println!("{} {}", value, {"VALUE: :?"});
-    arg.as_mut() = &mut (*value * *value)   // как это сделать блин, как сделать assign?
-    // let value = arg.as_mut();
-    // value = &mut 3u32;
+    let mut_ref = arg.as_mut();
+    *mut_ref = mut_ref.pow(2);
     // let mut value = arg.as_mut();
-    // value = &mut (*value * *value)
-    // let mut v = *arg.as();
-    // let mut v = *arg.as_mut();
-    //` where &mut T: Mul<&mut T, Output = ()>`
-    // v = v * v
-    // TODO: Implement the function body.
+    // println!("{} {}", value, {"VALUE: :?"});
+    // arg.as_mut() = &mut (*value * *value)   
 }
-/* 
-    #[test]
-    fn different_counts() {
-        let s = "Café au lait";
-        assert_ne!(char_counter(s), byte_counter(s));
-    }
-
-    #[test]
-    fn same_counts() {
-        let s = "Cafe au lait";
-        assert_eq!(char_counter(s), byte_counter(s));
-    }
-
-    #[test]
-    fn different_counts_using_string() {
-        let s = String::from("Café au lait");
-        assert_ne!(char_counter(s.clone()), byte_counter(s));
-    }
-*/
 
 fn main() {
     // You can optionally experiment here.

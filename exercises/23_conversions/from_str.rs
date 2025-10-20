@@ -23,6 +23,7 @@ enum ParsePersonError {
     NoName,
     // Wrapped error from parse::<u8>()
     ParseInt(ParseIntError),
+    StringParseError
 }
 
 // TODO: Complete this `FromStr` implementation to be able to parse a `Person`
@@ -42,28 +43,20 @@ impl FromStr for Person {
     type Err = ParsePersonError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let value: Vec<&str> = s.split(',').collect();
+        let tuple: Vec<&str> = s.split(',').collect();
         // let person = Person{};
-        if value.len() > 2 || value.len() < 2
+        if tuple.len() > 2 || tuple.len() < 2
             { return Result::Err(ParsePersonError::BadLen) }
-        else {
+        if tuple[0].is_empty()
+            { return Err(ParsePersonError::NoName) }
+                
+            let name = tuple[0].parse::<String>().map_err(|x| ParsePersonError::StringParseError);
+            let age = tuple[1].parse::<u8>().map_err(|x| ParsePersonError::ParseInt(x));
 
-            let name = match value[0].parse::<String>(){
-                Ok(v)=> Ok(v),
-                Err(e) => Err(ParsePersonError::NoName)
-            };
-            if name.is_err()
-                { return name }
-            let age = match value[1].parse::<u8>(){
-                Ok(v) => Ok(v),
-                Err(e) => Err(ParsePersonError::ParseInt(e))
-            };
             Ok(Person{
-                name: name.unwrap(),
-                age: age.unwrap()   //.expect_err(ParsePersonError::ParseInt(parse)
+                name: name?,
+                age: age?// TryIntotry_into::<u8>()?   //.expect_err(ParsePersonError::ParseInt(parse)
             })
-        }ew
-
         // match value.len() > 2 {
         //     true =>
         //     false => return Result::Err(ParsePersonError::BadLen) 
